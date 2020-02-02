@@ -32,6 +32,12 @@ var format = function (text) {
   return (text || "").replace(/\s+/g, " ");
 };
 
+/**
+ * Load sql files from specified folder.
+ * @param {string} root Start directory.
+ * @param {object} options Loading options.
+ * @returns {object} Loaded sql strings.
+ */
 var loadSync = function (root, options) {
   var filelist = {};
 
@@ -54,6 +60,12 @@ var loadSync = function (root, options) {
   return filelist;
 };
 
+/**
+ * Load sql files from specified folder.
+ * @param {string} root Start directory.
+ * @param {object} options Loading options.
+ * @returns {Promise} Called when loaded sql files.
+ */
 var loadAsync = function (root, options) {
   options = setOptions(options);
 
