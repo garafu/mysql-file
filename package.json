@@ -10,5 +10,10 @@
     "mysql"
   ],
   "author": "Akinari Tsugo",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/garafu/mysql-file.git"
+  },
+  "private": false
 }
