@@ -1,5 +1,19 @@
+const EXT = ".sql";
 const fs = require("fs");
 const path = require("path");
+
+/**
+ * @typedef {object}  SqlFileLoaderOptions
+ * @property  {string}  root  Root directory path.
+ */
+var config = {
+  root: path.join(process.cwd(), "./sql")
+};
+
+/**
+ * 
+ */
+var _cache = {};
 
 /**
  * Create option object.
@@ -20,16 +34,47 @@ var setOptions = function (options = {}) {
  * @returns {boolean} Is sql file or not.
  */
 var isTargetFile = function (filename) {
-  return /.+\.sql/i.test(filename || "");
+  return /.+\.sql$/i.test(filename || "");
 };
 
 /**
- * Trim empty spaces and return codes.
+ * Trim comments and empty spaces and return codes.
  * @param {string} text SQL string.
  * @returns {string}  trimed sql string.
  */
-var format = function (text) {
-  return (text || "").replace(/\s+/g, " ");
+var format = function (text = "") {
+  // Remove comment line.
+  text = text.replace(/\-\- .*/g, "");
+  text = text.replace(/\/\*[\s\S]*?\*\//mg, "");
+  // Remove spaces.
+  text = text.replace(/\s+/g, " ").trim()
+  return text;
+};
+
+var tryStat = function (path) {
+  try {
+    return fs.statSync(path);
+  } catch (err) {
+    return undefined;
+  }
+};
+
+var resolve = function (dir, file) {
+  var filepath, stat;
+
+  // <dir>/<file>
+  filepath = path.join(dir, file);
+  stat = tryStat(filepath);
+  if (stat && stat.isFile()) {
+    return filepath;
+  }
+
+  // <dir>/<file><ext>
+  filepath = path.join(dir, file + EXT);
+  stat = tryStat(filepath);
+  if (stat && stat.isFile()) {
+    return filepath;
+  }
 };
 
 /**
@@ -110,4 +155,48 @@ var loadAsync = function (root, options) {
   });
 };
 
-module.exports = { loadAsync, loadSync };
+/**
+ * Initialize SqlFileLoader.
+ * @param {SqlFileLoaderOptions} options 
+ * @returns {SqlFileLoader}
+ */
+var SqlFileLoader = function (options = {}) {
+  SqlFileLoader.init(options);
+  return SqlFileLoader;
+};
+
+/**
+ * Initialize SqlFileLoader.
+ * @param {SqlFileLoaderOptions} options 
+ */
+SqlFileLoader.init = function (options = {}) {
+  config.root = options.root ? path.resolve(options.root) : config.root;
+};
+
+/**
+ * Load specified SQL string from file.
+ * @param {string} name SQL file name
+ * @returns SQL string
+ */
+SqlFileLoader.sql = function (name) {
+  if (_cache[name]) {
+    return _cache[name];
+  }
+
+  // Get filepath.
+  var loc = path.resolve(config.root, name);
+  var dir = path.dirname(loc);
+  var file = path.basename(loc);
+  var filepath = resolve(dir, file);
+
+  // Load SQL file
+  var text = fs.readFileSync(filepath, "utf-8");
+  _cache[name] = format(text);
+
+  return _cache[name];
+};
+
+SqlFileLoader.loadAsync = loadAsync;
+SqlFileLoader.loadSync = loadSync;
+
+module.exports = SqlFileLoader;

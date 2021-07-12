@@ -15,5 +15,8 @@
     "type": "git",
     "url": "https://github.com/garafu/mysql-file.git"
   },
-  "private": false
+  "private": false,
+  "devDependencies": {
+    "jest": "^27.0.6"
+  }
 }
