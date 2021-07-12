@@ -67,7 +67,7 @@ Return value is object that includes key which is file name and value which is s
 ## Install
 
 ```
-npm install mtsql-file
+npm install mysql-file
 ```
 
 ## Licence
