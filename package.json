@@ -4,6 +4,7 @@
   "description": "Importing SQL string used in MySQL from external SQL files.",
   "main": "lib/index.js",
   "scripts": {
+    "test": "jest"
   },
   "keywords": [
     "mysql"
