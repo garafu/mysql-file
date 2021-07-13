@@ -1,10 +1,9 @@
 {
-  "name": "mysqlfile",
+  "name": "@garafu/mysql-fileloader",
   "version": "0.0.1",
   "description": "Importing SQL string used in MySQL from external SQL files.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "mysql"
@@ -13,7 +12,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/garafu/mysql-file.git"
+    "url": "https://github.com/garafu/mysql-fileloader.git"
   },
   "private": false,
   "devDependencies": {
