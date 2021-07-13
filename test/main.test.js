@@ -1,5 +1,5 @@
 const path = require("path");
-const { sql } = require("../index")({ root: path.join(__dirname, "./data") });
+const { sql } = require("../lib/index")({ root: path.join(__dirname, "./data") });
 
 describe("sql() method", () => {
   it("load sql file", () => {
