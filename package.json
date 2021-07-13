@@ -1,6 +1,6 @@
 {
   "name": "@garafu/mysql-fileloader",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Importing SQL string used in MySQL from external SQL files.",
   "main": "lib/index.js",
   "scripts": {
