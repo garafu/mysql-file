@@ -1,39 +1,76 @@
-mysql-file
+mysql-fileloader
 ====
 
 This module load MySQL SQL string from sql files.
 Recursively reads SQL files that exist under the specified folder.
 
+## Install
+
+```
+npm install @garafu/mysql-fileloader
+```
+
+or
+
+```
+yarn add @garafu/mysql-fileloader
+```
+
 ## Usage
 
-When reading synchronously.
+When read the required SQL string from specified file each time.
 
 ```
 const path = require("path");
-const load = require("mysql-file").loadSync;
-const SQL = load(path.join(__dirname, "./sql"));
-```
+const root = path.join(__dirname, "./sql");
+const { sql } = require("@garafu/mysql-fileloader")({ root });
 
-When reading asynchronously.
-
-```
-const path = require("path");
-const load = require("mysql-file").loadAsync;
-(async function (){
-  const SQL = await load(path.join(__dirname, "./sql"));
+(async () => {
+  console.log(await sql("SELECT_USER_BY_ID")); // <-- "SELECT * FROM user WHERE id=?"
 })();
 ```
+
+When reading synchronously all SQL files from under specified folder.
+
+```
+const path = require("path");
+const SQL = require("mysql-file").loadSync(path.join(__dirname, "./sql"));
+
+console.log(SQL["SELECT_USER_BY_ID"]); // <-- "SELECT * FROM user WHERE id=?"
+```
+
 ## Documents
 
 * function
-  * `function loadSync(root, options): SQL`
-  * `function loadAsync(root, options): SQL`
-* options
-  * `recursive`
-* returns
-  * `SQL`
+  * `function init([options]): void`
+  * `function sql(name): Promise<string>`
+  * `function loadSync(root [, options]): SQL`
+  * `function loadAsync(root [, options]): SQL`
 
 ### function
+
+_`function init([options]): void`_
+
+Initialize SqlFileLoader.
+
+**arguments**
+* options
+    * root  {string}  Root directory path of loading SQL files.
+
+**returns**
+
+This module object.
+
+_`function sql(name): Promise<string>`_
+
+Load SQL string from specified file asyncnously.
+
+**arguments**
+* name  {string}  SQL file name.
+
+**returns**
+`Promise<string>` SQL string
+
 _`function loadSync(root, options): SQL`_
 
 Load sql string syncronously from sql files under the specified folder.
@@ -64,11 +101,6 @@ _`SQL`_
 
 Return value is object that includes key which is file name and value which is sql string.
 
-## Install
-
-```
-npm install mysql-file
-```
 
 ## Licence
 
