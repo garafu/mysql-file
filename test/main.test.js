@@ -17,6 +17,12 @@ describe("sql() method", () => {
     expect(result).toBe("SELECT id, name, dob FROM t_user WHERE id=?");
   });
 
+  it("load sql string from cache", async () => {
+    var result;
+    result = await sql("SIMPLE");
+    result = await sql("SIMPLE");
+    expect(result).toBe("SELECT id, name, dob FROM t_user WHERE id=?");
+  });
 });
 
 describe("sqlSync() method", () => {
@@ -35,4 +41,10 @@ describe("sqlSync() method", () => {
     expect(result).toBe("SELECT id, name, dob FROM t_user WHERE id=?");
   });
 
+  it("load sql string from cache", async () => {
+    var result;
+    result = sqlSync("COMMENT_MULTILINE");
+    result = sqlSync("COMMENT_MULTILINE");
+    expect(result).toBe("SELECT id, name, dob FROM t_user WHERE id=?");
+  });
 });
